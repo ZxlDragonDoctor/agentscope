@@ -15,7 +15,7 @@ from __future__ import annotations
 import asyncio
 import inspect
 import json
-from typing (
+from typing import (
     Any,
     AsyncGenerator,
     Callable,
