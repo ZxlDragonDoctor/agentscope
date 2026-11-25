@@ -14,7 +14,8 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-from typing import (
+import json
+from typing (
     Any,
     AsyncGenerator,
     Callable,
@@ -365,7 +366,16 @@ class Mem0Middleware(MiddlewareBase):
                 yield item
         finally:
             if query_text and final_msg is not None:
-                assistant_text = final_msg.get_text_content()
+                structured_output = getattr(
+                    final_msg,
+                    "structured_output",
+                    None,
+                )
+                assistant_text = (
+                    json.dumps(structured_output, ensure_ascii=False)
+                    if structured_output is not None
+                    else final_msg.get_text_content()
+                )
                 if assistant_text:
                     await self._dispatch_write(
                         [
